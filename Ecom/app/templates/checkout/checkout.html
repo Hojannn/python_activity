@@ -1,0 +1,411 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout | TECH-CORE{% endblock %}
+
+{% block content %}
+
+<style>
+    .form-input-focus:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+</style>
+
+<main class="mt-10 mb-20 max-w-7xl mx-auto px-8">
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+        <!-- Left Side -->
+        <div class="lg:col-span-8 space-y-10">
+
+            <!-- Shipping -->
+            <section class="bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-8 h-8 bg-gray-100 rounded flex items-center justify-center">
+                        <span class="material-symbols-outlined text-blue-600">home</span>
+                    </div>
+                    <h2 class="text-2xl font-bold font-['Space_Grotesk']">Shipping Information</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm uppercase text-gray-500">First Name <span class="text-red-500">*</span></label>
+                        <input type="text" placeholder="John" form="order-form" name="first_name" id="s-first"
+                               value="{{ customer.ship_first_name or '' }}"
+                               class="p-3 border border-gray-300 rounded-lg form-input-focus">
+                        <span class="text-red-500 text-xs hidden" id="err-first">This field is required.</span>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm uppercase text-gray-500">Last Name <span class="text-red-500">*</span></label>
+                        <input type="text" placeholder="Doe" form="order-form" name="last_name" id="s-last"
+                               value="{{ customer.ship_last_name or '' }}"
+                               class="p-3 border border-gray-300 rounded-lg form-input-focus">
+                        <span class="text-red-500 text-xs hidden" id="err-last">This field is required.</span>
+                    </div>
+                    <div class="md:col-span-2 flex flex-col gap-2">
+                        <label class="text-sm uppercase text-gray-500">Street Address <span class="text-red-500">*</span></label>
+                        <input type="text" placeholder="123 Tech Lane" form="order-form" name="address" id="s-address"
+                               value="{{ customer.ship_address or '' }}"
+                               class="p-3 border border-gray-300 rounded-lg form-input-focus">
+                        <span class="text-red-500 text-xs hidden" id="err-address">This field is required.</span>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm uppercase text-gray-500">City <span class="text-red-500">*</span></label>
+                        <input type="text" placeholder="Manila" form="order-form" name="city" id="s-city"
+                               value="{{ customer.ship_city or '' }}"
+                               class="p-3 border border-gray-300 rounded-lg form-input-focus">
+                        <span class="text-red-500 text-xs hidden" id="err-city">This field is required.</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm uppercase text-gray-500">State <span class="text-red-500">*</span></label>
+                            <input type="text" placeholder="NCR" form="order-form" name="state" id="s-state"
+                                   value="{{ customer.ship_state or '' }}"
+                                   class="p-3 border border-gray-300 rounded-lg form-input-focus">
+                            <span class="text-red-500 text-xs hidden" id="err-state">This field is required.</span>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm uppercase text-gray-500">ZIP Code <span class="text-red-500">*</span></label>
+                            <input type="text" placeholder="1000" form="order-form" name="zip_code" id="s-zip"
+                                   value="{{ customer.ship_zip or '' }}"
+                                   class="p-3 border border-gray-300 rounded-lg form-input-focus">
+                            <span class="text-red-500 text-xs hidden" id="err-zip">This field is required.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Save Info Button -->
+                <div class="mt-6 flex justify-end">
+                    <button type="button" onclick="saveShipping()"
+                            class="flex items-center gap-2 bg-slate-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-slate-700 transition-all">
+                        <span class="material-symbols-outlined text-sm">save</span>
+                        Save Information
+                    </button>
+                </div>
+                <div id="shipping-saved" class="hidden mt-4 flex items-center gap-2 px-4 py-3 bg-green-50 border border-green-200 text-green-700 rounded-lg">
+                    <span class="material-symbols-outlined text-sm">check_circle</span>
+                    Shipping information saved.
+                </div>
+
+            </section>
+
+            <!-- Payment -->
+            <section class="bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-8 h-8 bg-gray-100 rounded flex items-center justify-center">
+                        <span class="material-symbols-outlined text-blue-600">credit_card</span>
+                    </div>
+                    <h2 class="text-2xl font-bold font-['Space_Grotesk']">Secure Payment</h2>
+                </div>
+
+                <!-- Payment Method Buttons -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    <button type="button" onclick="switchPayment('card')" id="btn-card"
+                            class="payment-btn py-4 border-2 border-blue-600 bg-blue-50 rounded-xl flex flex-col items-center gap-2 transition-all">
+                        <span class="material-symbols-outlined text-blue-600">credit_card</span>
+                        <span class="text-sm uppercase font-bold text-blue-600">Credit Card</span>
+                    </button>
+                    <button type="button" onclick="switchPayment('cash')" id="btn-cash"
+                            class="payment-btn py-4 border-2 border-gray-300 rounded-xl flex flex-col items-center gap-2 hover:bg-gray-50 transition-all">
+                        <span class="material-symbols-outlined text-gray-500">payments</span>
+                        <span class="text-sm uppercase text-gray-500">Cash</span>
+                    </button>
+                    <button type="button" onclick="switchPayment('online')" id="btn-online"
+                            class="payment-btn py-4 border-2 border-gray-300 rounded-xl flex flex-col items-center gap-2 hover:bg-gray-50 transition-all">
+                        <span class="material-symbols-outlined text-gray-500">account_balance_wallet</span>
+                        <span class="text-sm uppercase text-gray-500">Online Payment</span>
+                    </button>
+                </div>
+
+                <!-- Credit Card Panel -->
+                <div id="panel-card" class="space-y-6">
+                    <div id="payment-error" class="hidden flex items-center gap-2 px-4 py-3 bg-red-50 border border-red-200 text-red-700 rounded-lg">
+                        <span class="material-symbols-outlined text-sm">error</span>
+                        Invalid input. Please check your card details.
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm uppercase text-gray-500">Card Number</label>
+                        <input type="text" id="card-number" placeholder="0000 0000 0000 0000"
+                               maxlength="19" inputmode="numeric"
+                               class="p-3 border border-gray-300 rounded-lg form-input-focus tracking-widest">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm uppercase text-gray-500">Expiry Date</label>
+                            <input type="text" id="card-expiry" placeholder="MM / YY"
+                                   maxlength="7" inputmode="numeric"
+                                   class="p-3 border border-gray-300 rounded-lg form-input-focus">
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm uppercase text-gray-500">CVV</label>
+                            <input type="text" id="card-cvv" placeholder="•••"
+                                   maxlength="4" inputmode="numeric"
+                                   class="p-3 border border-gray-300 rounded-lg form-input-focus">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cash Panel -->
+                <div id="panel-cash" class="hidden">
+                    <div class="flex flex-col items-center text-center p-8 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                            <span class="material-symbols-outlined text-blue-600 text-4xl">payments</span>
+                        </div>
+                        <h4 class="text-lg font-bold mb-2">Payment on Delivery</h4>
+                        <p class="text-gray-500 max-w-md">
+                            Please have the exact amount ready for our courier upon arrival.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Online Payment Panel -->
+                <div id="panel-online" class="hidden space-y-4">
+                    <div id="online-error" class="hidden flex items-center gap-2 px-4 py-3 bg-red-50 border border-red-200 text-red-700 rounded-lg">
+                        <span class="material-symbols-outlined text-sm">error</span>
+                        Invalid input. Please select a payment method.
+                    </div>
+                    <p class="text-gray-600">Select your preferred digital wallet or online payment service.</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <button type="button" onclick="selectWallet(this)"
+                                class="wallet-btn flex items-center justify-center gap-3 p-4 border border-gray-300 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-all font-bold text-blue-500">
+                            PayPal
+                        </button>
+                        <button type="button" onclick="selectWallet(this)"
+                                class="wallet-btn flex items-center justify-center gap-3 p-4 border border-gray-300 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-all font-bold">
+                            GCash
+                        </button>
+                        <button type="button" onclick="selectWallet(this)"
+                                class="wallet-btn flex items-center justify-center gap-3 p-4 border border-gray-300 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-all font-bold">
+                            PayMaya
+                        </button>
+                        <button type="button" onclick="selectWallet(this)"
+                                class="wallet-btn flex items-center justify-center gap-3 p-4 border border-gray-300 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-all font-bold">
+                            GoTyme
+                        </button>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Security Notice -->
+            <div class="flex items-start gap-4 p-6 border border-emerald-200 rounded-xl bg-emerald-50">
+                <span class="material-symbols-outlined text-emerald-600">verified_user</span>
+                <div>
+                    <p class="text-sm uppercase text-emerald-800 font-semibold mb-1">Encrypted Transaction</p>
+                    <p class="text-emerald-700">Your connection to TECH-CORE is secured with industrial-grade encryption.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Side -->
+        <aside class="lg:col-span-4 sticky top-24 space-y-6">
+
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+
+                <div class="bg-gray-100 px-6 py-4 border-b border-gray-200">
+                    <h3 class="text-lg font-bold uppercase tracking-wider font-['Space_Grotesk']">Order Summary</h3>
+                </div>
+
+                <div class="p-6 space-y-6">
+
+                    <!-- Items -->
+                    <div class="space-y-4">
+                        {% for item in items %}
+                        <div class="flex gap-4">
+                            <div class="w-20 h-20 bg-gray-100 rounded-lg flex-shrink-0 overflow-hidden flex items-center justify-center">
+                                {% if item.product.image %}
+                                    <img src="{{ item.product.image }}" alt="{{ item.product.name }}"
+                                         class="w-full h-full object-cover">
+                                {% else %}
+                                    <span class="text-2xl font-bold text-slate-300">{{ item.product.name[0] }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-semibold text-slate-900">{{ item.product.name }}</p>
+                                <p class="text-blue-600 font-medium">${{ '%.2f'|format(item.product.price) }}</p>
+                                <p class="text-sm text-gray-500 mt-1">Qty: {{ item.quantity }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Pricing -->
+                    <div class="border-t border-dashed pt-6 space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Subtotal</span>
+                            <span class="font-mono">${{ '%.2f'|format(subtotal) }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Shipping</span>
+                            <span class="text-emerald-600 font-semibold">FREE</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Tax (8%)</span>
+                            <span class="font-mono">${{ '%.2f'|format(tax) }}</span>
+                        </div>
+                        <div class="flex justify-between pt-3 border-t">
+                            <span class="font-bold text-lg">Total</span>
+                            <span class="font-bold text-lg text-blue-600">${{ '%.2f'|format(total) }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Place Order -->
+                    <form id="order-form" method="POST" action="{{ url_for('checkout.place_order') }}">
+                        {% if buy_now_product_id %}
+                        <input type="hidden" name="buy_now_product_id" value="{{ buy_now_product_id }}">
+                        {% endif %}
+                        <button type="button" onclick="validateAndSubmit()"
+                                class="w-full bg-blue-600 text-white py-4 rounded-lg font-semibold uppercase tracking-widest hover:bg-blue-700 transition-all flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined">lock</span>
+                            Complete Purchase
+                        </button>
+                    </form>
+
+                    <a href="{{ url_for('cart.view_cart') }}"
+                       class="block text-center text-sm text-gray-500 hover:underline">Back to Cart</a>
+
+                    <p class="text-center text-xs text-gray-400">
+                        By clicking, you agree to the TECH-CORE
+                        <a href="#" class="underline">Terms of Service</a>.
+                    </p>
+
+                </div>
+            </div>
+
+            <!-- Support Card -->
+            <div class="bg-slate-50 p-6 rounded-xl border border-gray-200">
+                <h4 class="font-bold mb-2">Need Technical Support?</h4>
+                <p class="text-gray-500 text-sm mb-4">Our team is available 24/7 to help with compatibility checks.</p>
+                <a href="#" class="flex items-center gap-2 text-blue-600 text-sm font-semibold uppercase">
+                    <span class="material-symbols-outlined text-sm">chat</span>
+                    Start Live Chat
+                </a>
+            </div>
+
+        </aside>
+
+    </div>
+
+</main>
+
+<script>
+let activePayment = 'card';
+let selectedWallet = null;
+
+function saveShipping() {
+    const fields = ['first_name', 'last_name', 'address', 'city', 'state', 'zip_code'];
+    const allFilled = fields.every(name => {
+        const el = document.querySelector(`[name="${name}"]`);
+        return el && el.value.trim() !== '';
+    });
+    const msg = document.getElementById('shipping-saved');
+    if (!allFilled) {
+        alert('Please fill in all shipping fields before saving.');
+        return;
+    }
+    const data = new FormData();
+    fields.forEach(name => {
+        data.append(name, document.querySelector(`[name="${name}"]`).value.trim());
+    });
+    fetch('{{ url_for("checkout.save_shipping") }}', { method: 'POST', body: data })
+        .then(() => {
+            msg.classList.remove('hidden');
+            setTimeout(() => msg.classList.add('hidden'), 3000);
+        });
+}
+
+function switchPayment(method) {
+    activePayment = method;
+    ['card', 'cash', 'online'].forEach(m => {
+        const btn = document.getElementById('btn-' + m);
+        const icon = btn.querySelector('.material-symbols-outlined');
+        const label = btn.querySelector('span:last-child');
+        btn.classList.remove('border-blue-600', 'bg-blue-50');
+        btn.classList.add('border-gray-300');
+        icon.classList.replace('text-blue-600', 'text-gray-500');
+        label.classList.remove('text-blue-600', 'font-bold');
+        label.classList.add('text-gray-500');
+        document.getElementById('panel-' + m).classList.add('hidden');
+    });
+    const activeBtn = document.getElementById('btn-' + method);
+    const activeIcon = activeBtn.querySelector('.material-symbols-outlined');
+    const activeLabel = activeBtn.querySelector('span:last-child');
+    activeBtn.classList.add('border-blue-600', 'bg-blue-50');
+    activeBtn.classList.remove('border-gray-300');
+    activeIcon.classList.replace('text-gray-500', 'text-blue-600');
+    activeLabel.classList.add('text-blue-600', 'font-bold');
+    activeLabel.classList.remove('text-gray-500');
+    document.getElementById('panel-' + method).classList.remove('hidden');
+    // Hide errors on switch
+    document.getElementById('payment-error').classList.add('hidden');
+    document.getElementById('online-error').classList.add('hidden');
+}
+
+function selectWallet(btn) {
+    document.querySelectorAll('.wallet-btn').forEach(b => {
+        b.classList.remove('border-blue-600', 'bg-blue-50');
+        b.classList.add('border-gray-300');
+    });
+    btn.classList.add('border-blue-600', 'bg-blue-50');
+    btn.classList.remove('border-gray-300');
+    selectedWallet = btn.textContent.trim();
+    document.getElementById('online-error').classList.add('hidden');
+}
+
+function validateAndSubmit() {
+    // Validate shipping fields
+    const shippingFields = [
+        { id: 's-first',   err: 'err-first' },
+        { id: 's-last',    err: 'err-last' },
+        { id: 's-address', err: 'err-address' },
+        { id: 's-city',    err: 'err-city' },
+        { id: 's-state',   err: 'err-state' },
+        { id: 's-zip',     err: 'err-zip' },
+    ];
+    let shippingValid = true;
+    shippingFields.forEach(({ id, err }) => {
+        const input = document.getElementById(id);
+        const errEl = document.getElementById(err);
+        if (!input.value.trim()) {
+            input.classList.add('border-red-500');
+            errEl.classList.remove('hidden');
+            shippingValid = false;
+        } else {
+            input.classList.remove('border-red-500');
+            errEl.classList.add('hidden');
+        }
+    });
+    if (!shippingValid) {
+        document.getElementById('s-first').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+    }
+
+    // Validate payment fields
+    if (activePayment === 'card') {
+        const num = document.getElementById('card-number').value.replace(/\s/g, '');
+        const expiry = document.getElementById('card-expiry').value.trim();
+        const cvv = document.getElementById('card-cvv').value.trim();
+        const validCard = /^\d{16}$/.test(num);
+        const validExpiry = /^(0[1-9]|1[0-2])\s?\/\s?\d{2}$/.test(expiry);
+        const validCvv = /^\d{3,4}$/.test(cvv);
+        if (!validCard || !validExpiry || !validCvv) {
+            document.getElementById('payment-error').classList.remove('hidden');
+            document.getElementById('payment-error').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+        document.getElementById('payment-error').classList.add('hidden');
+    } else if (activePayment === 'online') {
+        if (!selectedWallet) {
+            document.getElementById('online-error').classList.remove('hidden');
+            document.getElementById('online-error').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+        document.getElementById('online-error').classList.add('hidden');
+    }
+    document.getElementById('order-form').submit();
+}
+</script>
+
+{% endblock %}

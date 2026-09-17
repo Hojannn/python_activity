@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}About | TECH-CORE{% endblock %}
+
+{% block content %}
+
+<main>
+
+    <!-- About Header -->
+    <section class="pt-20 pb-10 border-b border-slate-200">
+        <div class="max-w-3xl">
+            <p class="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Documentation</p>
+            <h1 class="text-5xl font-bold text-slate-900 mb-4">About TECH-CORE</h1>
+            <p class="text-lg text-slate-500">
+                A comprehensive overview of the technical foundations, development philosophy,
+                and structural integrity of the TECH-CORE high-performance computing ecosystem.
+            </p>
+        </div>
+    </section>
+
+    <!-- Project Overview -->
+    <section class="py-20 grid grid-cols-1 md:grid-cols-12 gap-8 border-b border-slate-200">
+        <div class="md:col-span-4">
+            <h2 class="text-3xl font-bold text-slate-900 sticky top-24">Project Overview</h2>
+        </div>
+        <div class="md:col-span-8 space-y-6 text-slate-500 leading-relaxed">
+            <p>
+                This e-commerce platform was created by a student as a final project,
+                built using Flask, SQLAlchemy, and Tailwind CSS. It demonstrates a fully
+                functional online store with product management, user authentication, cart,
+                and checkout systems.
+            </p>
+            <p>
+                The system is currently still under development, with ongoing improvements
+                being made to the UI, performance, and feature set. It serves as a practical
+                demonstration of full-stack web development skills.
+            </p>
+            <p>
+                Future improvements are planned including payment gateway integration,
+                email notifications, advanced filtering, and a more robust admin panel.
+            </p>
+        </div>
+    </section>
+
+    <!-- Development Goals -->
+    <section class="py-20">
+        <div class="max-w-4xl mx-auto">
+
+            <h2 class="text-3xl font-bold text-slate-900 text-center mb-12">Development Goals</h2>
+
+            <div class="space-y-6">
+
+                <div class="flex items-start gap-8 group">
+                    <div class="text-3xl font-bold text-slate-300 group-hover:text-blue-600 transition-colors shrink-0">01</div>
+                    <div>
+                        <h4 class="text-xl font-bold text-slate-900 mb-2">Improve User Experience (UI/UX)</h4>
+                        <p class="text-slate-500">Enhance design, navigation, and responsiveness across devices.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-8 group border-t border-slate-100 pt-6">
+                    <div class="text-3xl font-bold text-slate-300 group-hover:text-blue-600 transition-colors shrink-0">02</div>
+                    <div>
+                        <h4 class="text-xl font-bold text-slate-900 mb-2">Expand Core Features</h4>
+                        <p class="text-slate-500">Add filtering, cart improvements, secure checkout, and order tracking.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-8 group border-t border-slate-100 pt-6">
+                    <div class="text-3xl font-bold text-slate-300 group-hover:text-blue-600 transition-colors shrink-0">03</div>
+                    <div>
+                        <h4 class="text-xl font-bold text-slate-900 mb-2">Strengthen Performance and Security</h4>
+                        <p class="text-slate-500">Optimize speed, database efficiency, and improve security practices.</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+{% endblock %}

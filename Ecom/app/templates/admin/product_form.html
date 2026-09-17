@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Edit' if product else 'Add' }} Product | TECH-CORE{% endblock %}
+
+{% block content %}
+<main class="max-w-2xl mx-auto px-8 pt-32 pb-24">
+
+    <header class="mb-10">
+        <h1 class="text-4xl font-bold text-slate-900 font-['Space_Grotesk']">
+            {{ 'Edit Product' if product else 'Add Product' }}
+        </h1>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="mb-6 px-4 py-3 rounded-lg {{ 'bg-green-100 text-green-800' if category == 'success' else 'bg-red-100 text-red-800' }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST"
+          action="{{ url_for('admin.edit_product', product_id=product.id) if product else url_for('admin.add_product') }}"
+          class="bg-white border border-slate-200 rounded-xl shadow-sm p-8 space-y-6">
+
+        <div class="space-y-2">
+            <label class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Product Name</label>
+            <input type="text" name="name" required
+                   value="{{ product.name if product else '' }}"
+                   class="w-full bg-slate-100 border border-slate-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-600"
+                   placeholder="e.g. Mechanical Keyboard">
+        </div>
+
+        <div class="space-y-2">
+            <label class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Description</label>
+            <textarea name="description" required rows="3"
+                      class="w-full bg-slate-100 border border-slate-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-600"
+                      placeholder="Short product description">{{ product.description if product else '' }}</textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-2">
+                <label class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Price (₱)</label>
+                <input type="number" name="price" step="0.01" min="0" required
+                       value="{{ product.price if product else '' }}"
+                       class="w-full bg-slate-100 border border-slate-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-600"
+                       placeholder="0.00">
+            </div>
+            <div class="space-y-2">
+                <label class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Stock</label>
+                <input type="number" name="stock" min="0" required
+                       value="{{ product.stock if product else '' }}"
+                       class="w-full bg-slate-100 border border-slate-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-600"
+                       placeholder="0">
+            </div>
+        </div>
+
+        <div class="space-y-2">
+            <label class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Category</label>
+            <select name="category"
+                    class="w-full bg-slate-100 border border-slate-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-600">
+                {% for cat in ['CPU', 'GPU', 'Memory', 'Motherboard', 'Storage', 'Monitor', 'Power Supply', 'Peripherals'] %}
+                <option value="{{ cat }}" {{ 'selected' if product and product.category == cat else '' }}>{{ cat }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="space-y-2">
+            <label class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Image URL <span class="text-slate-400 normal-case">(optional)</span></label>
+            <input type="text" name="image"
+                   value="{{ product.image if product else '' }}"
+                   class="w-full bg-slate-100 border border-slate-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-600"
+                   placeholder="https://...">
+        </div>
+
+        <div class="flex gap-4 pt-2">
+            <button type="submit"
+                    class="flex-1 bg-blue-600 text-white font-bold py-4 rounded-lg hover:opacity-90 transition-all">
+                {{ 'Save Changes' if product else 'Add Product' }}
+            </button>
+            <a href="{{ url_for('admin.dashboard') }}"
+               class="flex-1 bg-slate-200 text-slate-900 font-bold py-4 rounded-lg flex items-center justify-center hover:bg-slate-300 transition-colors">
+                Cancel
+            </a>
+        </div>
+
+    </form>
+
+</main>
+{% endblock %}

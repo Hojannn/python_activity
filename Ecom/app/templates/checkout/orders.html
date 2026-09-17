@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}My Orders | TECH-CORE{% endblock %}
+
+{% block content %}
+<main class="max-w-[1440px] mx-auto px-8 pt-32 pb-24">
+
+    <header class="mb-12">
+        <h1 class="text-5xl font-bold text-slate-900 font-['Space_Grotesk']">My Orders</h1>
+        <p class="text-slate-500 mt-2">Your full order history.</p>
+    </header>
+
+    {% if orders %}
+    <div class="space-y-6">
+        {% for order in orders %}
+        <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+
+            <!-- Order Header -->
+            <div class="px-8 py-5 border-b border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div>
+                    <p class="font-bold text-slate-900">Order <span class="text-blue-600">#{{ order.id }}</span></p>
+                    <p class="text-sm text-slate-400 mt-1">{{ order.date_ordered.strftime('%B %d, %Y at %I:%M %p') }}</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="px-4 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold uppercase">
+                        {{ order.status }}
+                    </span>
+                    <a href="{{ url_for('checkout.order_confirmation', order_id=order.id) }}"
+                       class="text-blue-600 text-sm font-semibold hover:underline">
+                        View Details
+                    </a>
+                </div>
+            </div>
+
+            <!-- Order Items -->
+            <div class="divide-y divide-slate-100">
+                {% for item in order.items %}
+                <div class="px-8 py-4 flex justify-between items-center">
+                    <div>
+                        <p class="font-semibold text-slate-800">{{ item.product.name }}</p>
+                        <p class="text-sm text-slate-400">Qty: {{ item.quantity }} &times; ${{ '%.2f'|format(item.price) }}</p>
+                    </div>
+                    <span class="font-mono text-slate-700">${{ '%.2f'|format(item.price * item.quantity) }}</span>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Order Total -->
+            <div class="px-8 py-5 bg-slate-50 border-t border-slate-200 flex justify-between items-center">
+                <span class="font-semibold text-slate-700">Order Total</span>
+                <span class="text-xl font-bold text-blue-600">${{ '%.2f'|format(order.total + 14.95) }}</span>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="text-center py-24">
+        <span class="material-symbols-outlined text-6xl text-slate-300">receipt_long</span>
+        <p class="text-xl text-slate-500 mt-4">You have no orders yet.</p>
+        <a href="{{ url_for('products.all_products') }}"
+           class="mt-6 inline-block bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:opacity-90 transition-all">
+            Start Shopping
+        </a>
+    </div>
+    {% endif %}
+
+</main>
+{% endblock %}

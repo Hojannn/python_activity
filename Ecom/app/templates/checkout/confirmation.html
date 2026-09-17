@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Order Confirmed | TECH-CORE{% endblock %}
+
+{% block content %}
+<main class="max-w-[1440px] mx-auto px-8 pt-32 pb-24">
+
+    <div class="max-w-2xl mx-auto text-center mb-12">
+        <span class="material-symbols-outlined text-7xl text-green-500" style="font-variation-settings: 'FILL' 1;">
+            check_circle
+        </span>
+        <h1 class="text-5xl font-bold text-slate-900 mt-4 font-['Space_Grotesk']">Order Confirmed!</h1>
+        <p class="text-slate-500 mt-3">Thank you, {{ order.customer.username }}. Your order <span class="font-semibold text-blue-600">#{{ order.id }}</span> has been placed.</p>
+        <p class="text-slate-400 text-sm mt-1">Placed on {{ order.date_ordered.strftime('%B %d, %Y at %I:%M %p') }}</p>
+    </div>
+
+    <!-- Order Items -->
+    <div class="max-w-2xl mx-auto bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden mb-6">
+        <div class="px-8 py-5 border-b border-slate-200">
+            <h2 class="text-lg font-semibold text-slate-900">Items Ordered</h2>
+        </div>
+        <div class="divide-y divide-slate-100">
+            {% for item in order.items %}
+            <div class="px-8 py-5 flex justify-between items-center">
+                <div>
+                    <p class="font-semibold text-slate-900">{{ item.product.name }}</p>
+                    <p class="text-sm text-slate-500">Qty: {{ item.quantity }} &times; ${{ '%.2f'|format(item.price) }}</p>
+                </div>
+                <span class="font-mono text-blue-600">${{ '%.2f'|format(item.price * item.quantity) }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="px-8 py-5 bg-slate-50 flex justify-between items-center border-t border-slate-200">
+            <span class="font-semibold text-slate-700">Shipping</span>
+            <span class="font-mono">$14.95</span>
+        </div>
+        <div class="px-8 py-5 flex justify-between items-center border-t border-slate-200">
+            <span class="text-xl font-bold text-slate-900">Total</span>
+            <span class="text-2xl font-bold text-blue-600">${{ '%.2f'|format(order.total + 14.95) }}</span>
+        </div>
+    </div>
+
+    <!-- Status Badge -->
+    <div class="max-w-2xl mx-auto bg-white border border-slate-200 rounded-xl shadow-sm px-8 py-5 flex justify-between items-center mb-10">
+        <span class="text-slate-600 font-semibold">Order Status</span>
+        <span class="px-4 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold uppercase">
+            {{ order.status }}
+        </span>
+    </div>
+
+    <!-- Actions -->
+    <div class="max-w-2xl mx-auto flex gap-4">
+        <a href="{{ url_for('products.all_products') }}"
+           class="flex-1 bg-blue-600 text-white font-bold py-4 rounded-lg flex items-center justify-center hover:opacity-90 transition-all">
+            CONTINUE SHOPPING
+        </a>
+        <a href="{{ url_for('checkout.order_history') }}"
+           class="flex-1 bg-slate-200 text-slate-900 font-bold py-4 rounded-lg flex items-center justify-center hover:bg-slate-300 transition-colors">
+            VIEW MY ORDERS
+        </a>
+    </div>
+
+</main>
+{% endblock %}

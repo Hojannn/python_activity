@@ -1,0 +1,52 @@
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# Environment Variables
+.env
+.env.*
+
+# Database
+instance/
+*.db
+*.sqlite3
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# Flask
+instance/
+.flask_session/
+
+# Migrations (keep the folder structure but ignore auto-generated versions if preferred)
+# migrations/versions/
+
+# Utility / One-time Scripts (optional — remove if you want to track these)
+add_category.py
+add_shipping.py
+fix_categories.py
+make_admin.py
+reset_password.py
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE / Editor
+.vscode/
+.idea/
+*.suo
+*.user
+
+# Logs
+*.log
+
+# Distribution / Build
+dist/
+build/
+*.egg-info/

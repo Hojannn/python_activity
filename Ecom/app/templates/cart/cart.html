@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}Cart | TECH-CORE{% endblock %}
+
+{% block content %}
+<main class="max-w-[1440px] mx-auto px-8 pt-32 pb-24">
+
+    <header class="mb-12">
+        <h1 class="text-5xl font-bold text-slate-900 mb-4 font-['Space_Grotesk']">
+            Your Configuration
+        </h1>
+        <p class="text-lg text-slate-600 max-w-2xl">
+            Review your selected industrial-grade components.
+        </p>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="mb-4 px-4 py-3 rounded-lg bg-{{ 'green' if category == 'success' else 'red' }}-100 text-{{ 'green' if category == 'success' else 'red' }}-800">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if items %}
+    <div class="flex flex-col lg:grid lg:grid-cols-12 gap-6">
+
+        <!-- Product List -->
+        <div class="lg:col-span-8 space-y-4">
+            {% for item in items %}
+            <div class="bg-white p-6 rounded-xl border border-slate-200 flex flex-col md:flex-row gap-6 shadow-sm hover:shadow-md transition-all">
+
+                <div class="w-full md:w-40 h-40 bg-slate-100 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center">
+                    {% if item.product.image %}
+                        <img class="w-full h-full object-cover" src="{{ item.product.image }}" alt="{{ item.product.name }}">
+                    {% else %}
+                        <span class="text-4xl font-bold text-slate-400">{{ item.product.name[0] }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="flex-grow flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-2xl font-semibold text-slate-900 font-['Space_Grotesk']">
+                                {{ item.product.name }}
+                            </h3>
+                            <span class="font-mono text-blue-600">
+                                ₱{{ '%.2f'|format(item.product.price * item.quantity) }}
+                            </span>
+                        </div>
+                        <p class="text-slate-600 mt-1">{{ item.product.description }}</p>
+                    </div>
+
+                    <div class="mt-6 flex items-center justify-between">
+
+                        <!-- Quantity -->
+                        <div class="flex items-center border border-slate-300 rounded-lg overflow-hidden bg-slate-50">
+                            <form method="POST" action="{{ url_for('cart.update_quantity', item_id=item.id, action='decrease') }}">
+                                <button type="submit" class="p-2 hover:bg-slate-200 transition-colors">
+                                    <span class="material-symbols-outlined text-sm">remove</span>
+                                </button>
+                            </form>
+                            <span class="px-6 font-mono text-slate-900">{{ '%02d'|format(item.quantity) }}</span>
+                            <form method="POST" action="{{ url_for('cart.update_quantity', item_id=item.id, action='increase') }}">
+                                <button type="submit" class="p-2 hover:bg-slate-200 transition-colors">
+                                    <span class="material-symbols-outlined text-sm">add</span>
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Remove -->
+                        <form method="POST" action="{{ url_for('cart.remove_from_cart', item_id=item.id) }}">
+                            <button type="submit" class="flex items-center gap-2 text-red-600 text-sm uppercase hover:opacity-80 transition-opacity">
+                                <span class="material-symbols-outlined">delete</span>
+                                Remove
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Summary -->
+        <div class="lg:col-span-4">
+            <div class="bg-white border border-slate-200 p-8 rounded-xl sticky top-24 shadow-sm">
+
+                <h2 class="text-2xl font-semibold text-slate-900 mb-8 font-['Space_Grotesk']">
+                    Order Summary
+                </h2>
+
+                <div class="space-y-4 mb-8">
+                    <div class="flex justify-between items-center py-2 border-b border-slate-200">
+                        <span class="text-slate-600">Subtotal</span>
+                        <span class="font-mono">₱{{ '%.2f'|format(total) }}</span>
+                    </div>
+                    <div class="flex justify-between items-center py-2 border-b border-slate-200">
+                        <span class="text-slate-600">Shipping</span>
+                        <span class="font-mono">₱14.95</span>
+                    </div>
+                    <div class="flex justify-between items-center pt-6">
+                        <span class="text-2xl font-semibold text-slate-900">Total</span>
+                        <span class="text-3xl font-bold text-blue-600">₱{{ '%.2f'|format(total + 14.95) }}</span>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <a href="{{ url_for('checkout.checkout_page') }}" class="w-full bg-blue-600 text-white font-bold py-4 rounded-lg flex items-center justify-center gap-3 hover:opacity-90 transition-all">
+                        SECURE CHECKOUT
+                        <span class="material-symbols-outlined">lock</span>
+                    </a>
+                    <a href="{{ url_for('main.home') }}"
+                       class="w-full bg-slate-200 text-slate-900 font-bold py-4 rounded-lg flex items-center justify-center hover:bg-slate-300 transition-colors">
+                        CONTINUE SHOPPING
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    {% else %}
+    <div class="text-center py-24">
+        <span class="material-symbols-outlined text-6xl text-slate-300">shopping_cart</span>
+        <p class="text-xl text-slate-500 mt-4">Your cart is empty.</p>
+        <a href="{{ url_for('main.home') }}" class="mt-6 inline-block bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:opacity-90 transition-all">
+            Browse Products
+        </a>
+    </div>
+    {% endif %}
+
+</main>
+{% endblock %}

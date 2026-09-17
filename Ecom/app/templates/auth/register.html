@@ -1,0 +1,305 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Register
+{% endblock %}
+
+{% block content %}
+
+<main class="min-h-screen flex flex-col md:flex-row -mx-10 py-12">
+
+    <!-- LEFT SIDE -->
+    <section class="relative w-full md:w-1/2 lg:w-[45%] bg-slate-950 flex flex-col justify-between p-12 lg:p-20 overflow-hidden">
+
+        <!-- BACKGROUND -->
+        <div class="absolute inset-0 z-0 opacity-20">
+
+            <img class="w-full h-full object-cover grayscale mix-blend-overlay"
+                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgFUDvvTm5ykb8Yq38UBqo7Psu4AdhDXfrF9TgSfq27UiIzXMmW5y8r5Q4imAhFHCxJXNSYH-CS8duMg9x7oGZaUrclsCD5FemDgfNeQGXbHnOsYzN8NRX5IxP19jio_FGBqSw0kQwxP1nTZ0EK-609JR7-n_8CrDToGwttoHsF9lg6niiZAK7JMPkuR9iwR5As8nUnkZQlWZFwLAP7iFGFVA-4evfM5cVqNOG1GJzdxeusuPUzEfvhEWjoRDzWl_2qpXQJhFdhCjl"
+                 alt="Tech Background"/>
+
+        </div>
+
+        <!-- CONTENT -->
+        <div class="relative z-10">
+
+            <!-- LOGO -->
+            <div class="flex items-center gap-3 mb-16">
+
+                <div class="w-10 h-10 bg-blue-600 flex items-center justify-center rounded-sm">
+
+                    <span class="material-symbols-outlined text-white">
+                        memory
+                    </span>
+
+                </div>
+
+                <a href="{{ url_for('main.home') }}"
+                   class="text-2xl font-bold text-white tracking-widest uppercase hover:text-blue-400 transition-colors">
+
+                    TECH-CORE
+
+                </a>
+
+            </div>
+
+            <!-- TEXT -->
+            <div class="space-y-6">
+
+                <h1 class="text-5xl font-bold text-white max-w-md">
+                    Industrial Intelligence
+                </h1>
+
+                <p class="text-lg text-slate-300 max-w-sm">
+                    Join the ecosystem of high-performance computing.
+                    Access exclusive hardware configurations and technical support.
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="relative z-10 mt-auto pt-12">
+
+            <div class="flex flex-wrap gap-4 items-center">
+
+                <div class="flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/10 rounded-lg">
+
+                    <span class="material-symbols-outlined text-sm text-white">
+                        verified
+                    </span>
+
+                    <span class="text-xs uppercase text-white">
+                        Tier 1 Hardware
+                    </span>
+
+                </div>
+
+                <div class="flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/10 rounded-lg">
+
+                    <span class="material-symbols-outlined text-sm text-white">
+                        speed
+                    </span>
+
+                    <span class="text-xs uppercase text-white">
+                        Overclock Ready
+                    </span>
+
+                </div>
+
+            </div>
+
+            <p class="mt-8 text-xs text-slate-500">
+                © 2026 TECH-CORE INDUSTRIAL INTELLIGENCE
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- RIGHT SIDE -->
+    <section class="w-full md:w-1/2 lg:w-[55%] bg-white flex items-center justify-center p-8 md:p-12 lg:p-24">
+
+        <div class="w-full max-w-md space-y-10">
+
+            <!-- HEADER -->
+            <header class="space-y-2">
+
+                <h2 class="text-4xl font-bold text-slate-900">
+                    Create Account
+                </h2>
+
+                <p class="text-slate-500">
+                    Register your technical profile to begin procurement.
+                </p>
+
+            </header>
+
+            <!-- FLASH MESSAGES -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="flex items-center gap-3 px-4 py-3 rounded-lg {{ 'bg-red-50 border border-red-200 text-red-700' if category == 'danger' else 'bg-green-50 border border-green-200 text-green-700' }}">
+                        <span class="material-symbols-outlined text-sm">{{ 'error' if category == 'danger' else 'check_circle' }}</span>
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <!-- FORM -->
+            <form class="space-y-6"
+                  method="POST">
+
+                <!-- FULL NAME -->
+                <div class="space-y-2">
+
+                    <label class="text-sm text-slate-500 uppercase tracking-wider block"
+                           for="full_name">
+
+                        Full Name
+
+                    </label>
+
+                    <input class="w-full bg-slate-100 border border-slate-300 rounded-lg px-4 py-4 outline-none focus:ring-2 focus:ring-blue-600"
+                           id="full_name"
+                           name="full_name"
+                           placeholder="John Doe"
+                           type="text"/>
+
+                </div>
+
+                <!-- EMAIL -->
+                <div class="space-y-2">
+
+                    <label class="text-sm text-slate-500 uppercase tracking-wider block"
+                           for="email">
+
+                        Email Address
+
+                    </label>
+
+                    <input class="w-full bg-slate-100 border border-slate-300 rounded-lg px-4 py-4 outline-none focus:ring-2 focus:ring-blue-600"
+                           id="email"
+                           name="email"
+                           placeholder="operator@techcore.io"
+                           type="email"/>
+
+                </div>
+
+                <!-- PASSWORDS -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                    <div class="space-y-2">
+
+                        <label class="text-sm text-slate-500 uppercase tracking-wider block"
+                               for="password">
+                            Password
+                        </label>
+
+                        <div class="relative">
+                            <input class="w-full bg-slate-100 border border-slate-300 rounded-lg px-4 py-4 pr-12 outline-none focus:ring-2 focus:ring-blue-600"
+                                   id="password"
+                                   name="password"
+                                   placeholder="••••••••"
+                                   type="password"/>
+                            <button type="button" onclick="togglePassword('password', 'eye-reg1')"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                                <span class="material-symbols-outlined text-xl" id="eye-reg1">visibility</span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <div class="space-y-2">
+
+                        <label class="text-sm text-slate-500 uppercase tracking-wider block"
+                               for="confirm_password">
+                            Confirm Password
+                        </label>
+
+                        <div class="relative">
+                            <input class="w-full bg-slate-100 border border-slate-300 rounded-lg px-4 py-4 pr-12 outline-none focus:ring-2 focus:ring-blue-600"
+                                   id="confirm_password"
+                                   name="confirm_password"
+                                   placeholder="••••••••"
+                                   type="password"/>
+                            <button type="button" onclick="togglePassword('confirm_password', 'eye-reg2')"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                                <span class="material-symbols-outlined text-xl" id="eye-reg2">visibility</span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- TERMS -->
+                <div class="flex items-start gap-3 pt-2">
+
+                    <input class="h-5 w-5"
+                           id="terms"
+                           name="terms"
+                           type="checkbox"/>
+
+                    <label class="text-sm text-slate-500 leading-tight"
+                           for="terms">
+
+                        I agree to the
+
+                        <a class="text-blue-600 hover:underline"
+                           href="#">
+
+                            Terms of Service
+
+                        </a>
+
+                        and
+
+                        <a class="text-blue-600 hover:underline"
+                           href="#">
+
+                            Privacy Policy
+
+                        </a>
+
+                    </label>
+
+                </div>
+
+                <!-- BUTTON -->
+                <button class="w-full bg-blue-600 text-white py-5 rounded-lg hover:bg-blue-700 transition-all flex items-center justify-center gap-2 font-bold"
+                        type="submit">
+
+                    <span>Create Account</span>
+
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+
+                </button>
+
+            </form>
+
+            <!-- LOGIN -->
+            <footer class="pt-8 border-t border-slate-300 flex flex-col sm:flex-row items-center justify-between gap-4">
+
+                <p class="text-slate-500">
+                    Already have an account?
+                </p>
+
+                <a class="flex items-center gap-2 px-6 py-3 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-all"
+                   href="{{ url_for('auth.login') }}">
+
+                    <span>Log In</span>
+
+                    <span class="material-symbols-outlined text-sm">
+                        login
+                    </span>
+
+                </a>
+
+            </footer>
+
+        </div>
+
+    </section>
+
+</main>
+
+<script>
+function togglePassword(fieldId, iconId) {
+    const field = document.getElementById(fieldId);
+    const icon = document.getElementById(iconId);
+    if (field.type === 'password') {
+        field.type = 'text';
+        icon.textContent = 'visibility_off';
+    } else {
+        field.type = 'password';
+        icon.textContent = 'visibility';
+    }
+}
+</script>
+
+{% endblock %}

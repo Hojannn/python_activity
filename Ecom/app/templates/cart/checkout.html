@@ -1,0 +1,279 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout | TECH-CORE{% endblock %}
+
+{% block content %}
+
+<!-- Checkout Section -->
+<main class="mt-24 mb-20 max-w-[1440px] mx-auto px-8">
+
+    <!-- Progress Stepper -->
+    <div class="max-w-4xl mx-auto mb-12">
+        <div class="flex items-center justify-between relative">
+            <div class="absolute top-1/2 left-0 w-full h-[2px] bg-slate-200 -z-10 -translate-y-1/2"></div>
+
+            <!-- Step 1 -->
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center ring-4 ring-blue-200">
+                    <span class="material-symbols-outlined">local_shipping</span>
+                </div>
+                <span class="text-xs uppercase font-bold text-blue-600">Shipping</span>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-10 h-10 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center">
+                    <span class="material-symbols-outlined">payments</span>
+                </div>
+                <span class="text-xs uppercase font-bold text-slate-500">Payment</span>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-10 h-10 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center">
+                    <span class="material-symbols-outlined">rate_review</span>
+                </div>
+                <span class="text-xs uppercase font-bold text-slate-500">Review</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+        <!-- Checkout Form -->
+        <div class="lg:col-span-8 space-y-10">
+
+            <!-- Shipping Information -->
+            <section class="bg-white p-8 rounded-xl border shadow-sm">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-8 h-8 bg-slate-100 rounded flex items-center justify-center">
+                        <span class="material-symbols-outlined text-blue-600">home</span>
+                    </div>
+
+                    <h2 class="text-2xl font-bold">Shipping Information</h2>
+                </div>
+
+                <form method="POST" action="{{ url_for('main.checkout') }}"
+                    class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                    <div class="flex flex-col gap-2">
+                        <label class="text-xs uppercase font-bold text-slate-500">
+                            First Name
+                        </label>
+
+                        <input type="text"
+                            name="first_name"
+                            placeholder="John"
+                            class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label class="text-xs uppercase font-bold text-slate-500">
+                            Last Name
+                        </label>
+
+                        <input type="text"
+                            name="last_name"
+                            placeholder="Doe"
+                            class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+
+                    <div class="md:col-span-2 flex flex-col gap-2">
+                        <label class="text-xs uppercase font-bold text-slate-500">
+                            Street Address
+                        </label>
+
+                        <input type="text"
+                            name="address"
+                            placeholder="123 Tech Lane"
+                            class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label class="text-xs uppercase font-bold text-slate-500">
+                            City
+                        </label>
+
+                        <input type="text"
+                            name="city"
+                            placeholder="San Jose"
+                            class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex flex-col gap-2">
+                            <label class="text-xs uppercase font-bold text-slate-500">
+                                State
+                            </label>
+
+                            <input type="text"
+                                name="state"
+                                placeholder="CA"
+                                class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+
+                        <div class="flex flex-col gap-2">
+                            <label class="text-xs uppercase font-bold text-slate-500">
+                                ZIP Code
+                            </label>
+
+                            <input type="text"
+                                name="zip_code"
+                                placeholder="95131"
+                                class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                    </div>
+
+                    <!-- Payment -->
+                    <div class="md:col-span-2 mt-10">
+
+                        <div class="flex items-center gap-4 mb-8">
+                            <div class="w-8 h-8 bg-slate-100 rounded flex items-center justify-center">
+                                <span class="material-symbols-outlined text-blue-600">
+                                    credit_card
+                                </span>
+                            </div>
+
+                            <h2 class="text-2xl font-bold">Secure Payment</h2>
+                        </div>
+
+                        <div class="space-y-6">
+
+                            <div class="flex flex-col gap-2">
+                                <label class="text-xs uppercase font-bold text-slate-500">
+                                    Card Number
+                                </label>
+
+                                <input type="text"
+                                    name="card_number"
+                                    placeholder="0000 0000 0000 0000"
+                                    class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-xs uppercase font-bold text-slate-500">
+                                        Expiry Date
+                                    </label>
+
+                                    <input type="text"
+                                        name="expiry"
+                                        placeholder="MM / YY"
+                                        class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                                </div>
+
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-xs uppercase font-bold text-slate-500">
+                                        CVV
+                                    </label>
+
+                                    <input type="password"
+                                        name="cvv"
+                                        placeholder="***"
+                                        class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="md:col-span-2 mt-8">
+                        <button type="submit"
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg font-bold uppercase tracking-wide transition">
+                            Complete Purchase
+                        </button>
+                    </div>
+
+                </form>
+            </section>
+
+            <!-- Security Notice -->
+            <div class="flex items-start gap-4 p-6 bg-green-50 border border-green-100 rounded-xl">
+                <span class="material-symbols-outlined text-green-600">
+                    verified_user
+                </span>
+
+                <div>
+                    <p class="text-xs uppercase font-bold text-green-800 mb-1">
+                        Encrypted Transaction
+                    </p>
+
+                    <p class="text-sm text-green-700">
+                        Your connection is secured with industrial-grade encryption.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Order Summary -->
+        <aside class="lg:col-span-4 sticky top-24">
+
+            <div class="bg-white rounded-xl border shadow-sm overflow-hidden">
+
+                <div class="bg-slate-100 px-6 py-4 border-b">
+                    <h3 class="font-bold uppercase tracking-wider">
+                        Order Summary
+                    </h3>
+                </div>
+
+                <div class="p-6 space-y-6">
+
+                    <!-- Example Item -->
+                    <div class="flex gap-4">
+
+                        <div class="w-20 h-20 bg-slate-100 rounded-lg overflow-hidden">
+                            <img src="https://via.placeholder.com/100"
+                                alt="Product"
+                                class="w-full h-full object-cover">
+                        </div>
+
+                        <div class="flex-1">
+                            <p class="font-semibold">TECH-CORE Ultra X-12</p>
+                            <p class="text-blue-600">$549.00</p>
+                            <p class="text-sm text-slate-500">Qty: 1</p>
+                        </div>
+
+                    </div>
+
+                    <!-- Price Breakdown -->
+                    <div class="border-t pt-6 space-y-3">
+
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Subtotal</span>
+                            <span>$549.00</span>
+                        </div>
+
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Shipping</span>
+                            <span class="text-green-600">FREE</span>
+                        </div>
+
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Tax</span>
+                            <span>$43.92</span>
+                        </div>
+
+                        <div class="flex justify-between pt-3 border-t">
+                            <span class="font-bold text-lg">Total</span>
+                            <span class="font-bold text-lg text-blue-600">
+                                $592.92
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</main>
+
+{% endblock %}
